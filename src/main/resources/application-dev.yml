@@ -1,0 +1,30 @@
+data-pulse:
+  execution:
+    trigger:
+      type: on-demand
+      execute-at:
+        format: yyyy-MM-dd HH:mm:ss.SSS
+        time: 2026-01-20 20:00:00.000
+
+    strategy:
+      type: stream
+      limitations:
+        duration: PT5M
+        entities-count: 100
+        size: #optional - further discussion is required on this since this option will filter after the query execution - what do we do in that case?
+          amount: 1500
+          unit: MB
+#      type: batch
+#      limitations:
+#        time-range: #mandatory
+#          format: yyyy-MM-dd HH:mm:ss.SSS
+#          segmentation: minutes  #options: minutes, hours, days, months, none
+#          from: 2026-01-20 14:00:00.000
+#          to: 2026-01-20 16:00:00.000
+#        entities-count: #optional
+#          order-by-field: INSERTION_TIME
+#          value: 50
+#          relation: last #FIRST/LAST
+#        size: #optional - further discussion is required on this since this option will filter after the query execution - what do we do in that case?
+#          amount: 1500
+#          unit: MB

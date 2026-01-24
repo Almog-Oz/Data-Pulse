@@ -1,9 +1,10 @@
 package org.ditto.datapulse.conntector.oracle;
 
+import lombok.Getter;
 import org.apache.commons.dbutils.QueryRunner;
-import org.apache.commons.dbutils.handlers.MapListHandler;
 import org.ditto.datapulse.conntector.BatchConnector;
-import org.ditto.datapulse.conntector.DatasourceType;
+import org.ditto.datapulse.models.datasource.types.DatasourceType;
+import org.ditto.datapulse.models.datasource.types.SQLDatasourceConfiguration;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -11,12 +12,19 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
+@Getter
 public class OracleConnector implements BatchConnector<CommonOracleBatchRequestContext, List<Map<String, Object>>> {
+    private final SQLDatasourceConfiguration configuration;
     private final Connection connection;
 
-    public OracleConnector(String JDBCUrl, String username, String password) {
+    public OracleConnector(SQLDatasourceConfiguration configuration) {
+        this.configuration = configuration;
         try {
-            this.connection = DriverManager.getConnection(JDBCUrl, username, password);
+            this.connection = DriverManager.getConnection(
+                    configuration.getUrl(),
+                    configuration.getUsername(),
+                    configuration.getPassword());
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -24,7 +32,7 @@ public class OracleConnector implements BatchConnector<CommonOracleBatchRequestC
 
     @Override
     public List<Map<String, Object>> execute(CommonOracleBatchRequestContext ctx) {
-        System.out.println("Quering oracle database");
+        System.out.println("Querying oracle database");
         List<Map<String, Object>> result;
         try {
             QueryRunner queryRunner = new QueryRunner();
@@ -60,4 +68,5 @@ public class OracleConnector implements BatchConnector<CommonOracleBatchRequestC
             throw new RuntimeException(e);
         }
     }
+
 }

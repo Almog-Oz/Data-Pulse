@@ -1,5 +1,7 @@
 package org.ditto.datapulse.conntector;
 
+import org.ditto.datapulse.models.datasource.types.DatasourceType;
+
 import java.sql.SQLException;
 
 public interface SourceConnector {

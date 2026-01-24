@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
-public class OracleConnector implements BatchConnector<CommonBatchRequestHandler, List<Map<String, Object>>> {
+public class OracleConnector implements BatchConnector<CommonOracleBatchRequestContext, List<Map<String, Object>>> {
     private final Connection connection;
 
     public OracleConnector(String JDBCUrl, String username, String password) {
@@ -23,12 +23,12 @@ public class OracleConnector implements BatchConnector<CommonBatchRequestHandler
     }
 
     @Override
-    public List<Map<String, Object>> execute(CommonBatchRequestHandler ctx) {
+    public List<Map<String, Object>> execute(CommonOracleBatchRequestContext ctx) {
+        System.out.println("Quering oracle database");
         List<Map<String, Object>> result;
-
         try {
             QueryRunner queryRunner = new QueryRunner();
-            result = queryRunner.query(this.connection, ctx.getQuery(), new MapListHandler());
+            result = queryRunner.query(this.connection, ctx.getQuery(), ctx.getResultSetHandler());
         } catch (SQLException se) {
             throw new RuntimeException("Couldn't query the database.", se);
         }

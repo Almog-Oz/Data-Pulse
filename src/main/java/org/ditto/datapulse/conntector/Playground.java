@@ -2,7 +2,7 @@ package org.ditto.datapulse.conntector;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.ditto.datapulse.conntector.oracle.CommonBatchRequestHandler;
+import org.ditto.datapulse.conntector.oracle.CommonOracleBatchRequestContext;
 import org.ditto.datapulse.conntector.oracle.OracleConnector;
 
 import java.util.List;
@@ -21,7 +21,7 @@ public class Playground {
                   SUM(CASE WHEN pickup_datetime IS NOT NULL THEN 1 ELSE 0 END) AS non_null_pickup_dt
                 FROM (SELECT * FROM YELLOW_TRIPDATA_SAMPLE);
                 """;
-        CommonBatchRequestHandler countQueryContext = new CommonBatchRequestHandler(countQuery);
+        CommonOracleBatchRequestContext countQueryContext = new CommonOracleBatchRequestContext(countQuery);
 
         String distinctQuery = """
                 SELECT
@@ -36,7 +36,7 @@ public class Playground {
                 FROM (SELECT * FROM YELLOW_TRIPDATA_SAMPLE)
                 GROUP BY payment_type;
                 """;
-        CommonBatchRequestHandler distinctQueryContext = new CommonBatchRequestHandler(distinctQuery);
+        CommonOracleBatchRequestContext distinctQueryContext = new CommonOracleBatchRequestContext(distinctQuery);
 
         List<Map<String, Object>> countResult = connector.execute(countQueryContext);
         List<Map<String, Object>> distinctResult = connector.execute(distinctQueryContext);
